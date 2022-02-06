@@ -1,0 +1,39 @@
+{
+    "AVAILABLE_LANGUAGE": [
+        "RU",
+        "EN"
+    ],
+    "RU": {
+        "TITLE": "Главная",
+        "LANGUAGE_RADIO_BUTTON_TITLE": "Языки",
+        "THEME_SWITCH_TITLE": "Тема",
+        "LOG_OUT_BUTTON_TITLE": "Выйти",
+        "LANGUAGES_NAMES": [
+            {
+                "label": "русский",
+                "value": "RU"
+            },
+            {
+                "label": "английский",
+                "value": "EN"
+            }
+        ]
+    },
+    "EN": {
+        "TITLE": "Home",
+        "LANGUAGE_RADIO_BUTTON_TITLE": "Language",
+        "THEME_SWITCH_TITLE": "Theme",
+        "LOG_OUT_BUTTON_TITLE": "Log Out",
+        "LANGUAGES_NAMES": [
+            {
+                "label": "russian",
+                "value": "RU"
+            },
+            {
+                "label": "english",
+                "value": "EN"
+            }
+        ]
+    },
+    "INITIAL_LANGUAGE": "EN"
+}
