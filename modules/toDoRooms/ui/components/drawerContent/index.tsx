@@ -5,14 +5,17 @@ import { LocalizationContext } from "../../../../../src/localization";
 import { ILanguages } from "../../../../../src/localization/entities/ILanguages";
 import { ThemesContext } from "../../../../../src/themes";
 import { styles } from "./styles";
-import { AuthorizationContext } from "../../../../authentication/useCases/authorization";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ILocalizationContext } from "../../../../../src/localization/entities/ILocalizationContext";
 import { IAuthorizationContext } from "../../../../authentication/useCases/authorization/entities/IAuthorizationContext";
 import { IThemesContext } from "../../../../../src/themes/entities/IThemesContext";
+import { AppDispatch } from "../../../../../src/appStorage/redux/store";
+import { useDispatch } from "react-redux";
+import { signOut } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
 
 export const DrawerContent: FC = () => {
     const LocalContext = useContext<ILocalizationContext>(LocalizationContext);
-    const isAuthorizeContext = useContext<IAuthorizationContext>(AuthorizationContext);
+    const dispatch: AppDispatch = useDispatch();
     const [isEnabled, setIsEnabled] = useState<boolean>(false);
     const theme = useContext<IThemesContext>(ThemesContext);
 
@@ -21,12 +24,17 @@ export const DrawerContent: FC = () => {
         return setIsEnabled(previousState => !previousState);
     };
 
+    const setSignOut = async () => {
+        dispatch(signOut());
+        await AsyncStorage.removeItem('userData');
+    }
+
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.sideMenuBackground }]}>
             <View style={styles.area}>
                 <Text style={{ color: theme.colors.color }}>{LocalContext.translations.THEME_SWITCH_TITLE}</Text>
                 <Switch
-                    trackColor={{ false: '#fff', true: '#000' }}
+                    trackColor={{ false: '#000', true: '#fff' }}
                     thumbColor={theme.colors.backgroundColor}
                     ios_backgroundColor={theme.colors.backgroundColor}
                     onValueChange={toggleSwitch}
@@ -42,7 +50,7 @@ export const DrawerContent: FC = () => {
                 />
             </View>
             <View style={styles.area}>
-                <TouchableOpacity onPress={async () => { isAuthorizeContext.setIsAuthorize(false) }}>
+                <TouchableOpacity onPress={setSignOut}>
                     <Text style={{ color: theme.colors.color }}>
                         {LocalContext.translations.LOG_OUT_BUTTON_TITLE}
                     </Text>

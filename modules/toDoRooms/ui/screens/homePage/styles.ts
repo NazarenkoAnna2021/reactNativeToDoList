@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
         fontWeight: '700',
     },
     helloText: {
-        marginTop: 45,
         marginBottom: 85
     },
 });

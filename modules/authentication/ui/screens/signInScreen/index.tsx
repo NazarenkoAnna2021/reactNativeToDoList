@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { View, ImageBackground, Text } from "react-native";
 import { AuthenticationInput } from "../../components/authenticationInput";
 import { PasswordInput } from "../../components/passwordInput";
@@ -7,30 +7,42 @@ import { styles } from "./styles";
 import { AuthenticationTransitionText } from "../../components/authenticationTransitionText";
 import { NavigationProp } from "@react-navigation/native";
 import { SignInText } from "../../components/signInText";
-import { AuthorizationContext } from "../../../useCases/authorization";
 import { getUser } from "../../../useCases/getUser";
 import { isValidEmail } from "../../../useCases/validation/isValidEmail";
 import { isValidPassword } from "../../../useCases/validation/isValidPassword";
 import { resetStorage } from "../../../useCases/resetStorage";
-import { IAuthorizationContext } from "../../../useCases/authorization/entities/IAuthorizationContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuthorizationState, selectAuthorizationUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateSelector";
+import { AppDispatch } from "../../../../../src/appStorage/redux/store";
+import { setIsAuthorizeAction } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
+import { IUser } from "../../../useCases/validation/entities/IUser";
 
 interface IProps {
-    navigation: NavigationProp<{[key: string]: unknown}>
+    navigation: NavigationProp<{ [key: string]: unknown }>
 };
 
 export const SignInScreen: FC<IProps> = ({ navigation }) => {
     const [inputEmail, setInputEmail] = useState<string | null>(null);
     const [inputPassword, setInputPassword] = useState<string | null>(null);
-    const isAuthorized = useContext<IAuthorizationContext>(AuthorizationContext);
     const [isEnabledButton, setIsEnabledButton] = useState<boolean>(false);
+    const dispatch: AppDispatch = useDispatch();
+    const userData: IUser | null = useSelector(selectAuthorizationUserData);
 
     useEffect(() => {
         getUser({ setInputEmail, setInputPassword });
+        setIsEnabledButton(checkInputs());
     }, []);
 
     useEffect(() => {
         setIsEnabledButton(checkInputs());
     }, [inputEmail, inputPassword]);
+
+    useEffect(() => {
+        if (userData?.value.email && userData?.value.password) {
+            setInputEmail(userData.value.email);
+            setInputPassword(userData.value.password);
+        };
+    }, [userData]);
 
     const openScreen = (key: string): void => {
         navigation.navigate(key);
@@ -42,7 +54,7 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
 
     const authorizeUser = (): void => {
         if (checkInputs()) {
-            isAuthorized.setIsAuthorize(true);
+            dispatch(setIsAuthorizeAction(true));
             resetStorage(inputEmail, inputPassword);
         }
     };

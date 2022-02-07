@@ -8,7 +8,6 @@ import { IThemesContext } from '../../../../../src/themes/entities/IThemesContex
 
 interface IProps {
     margin: {
-        marginTop: number;
         marginBottom: number;
     }
 }

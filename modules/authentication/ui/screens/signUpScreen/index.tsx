@@ -11,6 +11,9 @@ import { isValidEmail } from "../../../useCases/validation/isValidEmail";
 import { NavigationProp } from "@react-navigation/native";
 import { isValidPassword } from "../../../useCases/validation/isValidPassword";
 import { resetStorage } from "../../../useCases/resetStorage";
+import { AppDispatch } from "../../../../../src/appStorage/redux/store";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
 
 interface IProps {
     navigation: NavigationProp<any>
@@ -22,6 +25,7 @@ export const SignUpScreen: FC<IProps> = ({ navigation }) => {
     const [inputEmail, setInputEmail] = useState<string | null>(null);
     const [inputPassword, setInputPassword] = useState<string | null>(null);
     const [isEnabledButton, setIsEnabledButton] = useState<boolean>(false);
+    const dispatch: AppDispatch = useDispatch();
 
     const openScreen = (key: string): void => {
         navigation.navigate(key);
@@ -35,6 +39,13 @@ export const SignUpScreen: FC<IProps> = ({ navigation }) => {
         if (checkInputs()) {
             setIsEnabledButton(checkInputs());
             resetStorage(inputEmail, inputPassword);
+            dispatch(setUserData({
+                value: {
+                    userName: inputUserName,
+                    email: inputEmail,
+                    password: inputPassword
+                }
+            }))
         }
     }, [inputUserName, inputEmail, inputPassword, isChecked]);
 
