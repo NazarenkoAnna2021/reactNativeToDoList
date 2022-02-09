@@ -17,7 +17,7 @@ export const StackAuthenticationNavigator: FC = () => {
                 ? ( <Stack.Screen name="DrawerHomeNavigation" component={DrawerHomeNavigation} /> )
                 : ( <>
                     <Stack.Screen name="SignIn" component={SignInScreen} />
-                    <Stack.Screen name="Sig nUn" component={SignUpScreen} />
+                    <Stack.Screen name="SignUn" component={SignUpScreen} />
                 </> )
             }
         </Stack.Navigator>

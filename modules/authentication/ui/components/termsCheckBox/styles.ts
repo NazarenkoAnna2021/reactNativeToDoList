@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '95%',
-        paddingTop: 15,
     },
     iconStyle: {
         borderColor: '#ffffff60',

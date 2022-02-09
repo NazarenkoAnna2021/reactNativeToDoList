@@ -7,7 +7,6 @@ import { ThemesContext } from "../../../../../src/themes";
 import { styles } from "./styles";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ILocalizationContext } from "../../../../../src/localization/entities/ILocalizationContext";
-import { IAuthorizationContext } from "../../../../authentication/useCases/authorization/entities/IAuthorizationContext";
 import { IThemesContext } from "../../../../../src/themes/entities/IThemesContext";
 import { AppDispatch } from "../../../../../src/appStorage/redux/store";
 import { useDispatch } from "react-redux";

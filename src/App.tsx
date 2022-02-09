@@ -5,7 +5,6 @@ import { ContainerNavigator } from './navigation/containerNavigator';
 import { StyleSheet } from 'react-native';
 import { LogBox } from 'react-native';
 import { LocalizationProvider } from './localization'
-import { AuthorizationProvider } from '../modules/authentication/useCases/authorization';
 import { ThemesProvider } from './themes';
 import { Provider } from 'react-redux';
 import { store } from './appStorage/redux/store';
@@ -19,13 +18,11 @@ export const App: FC = () => {
     return (
         <LocalizationProvider >
             <ThemesProvider>
-                {/* <AuthorizationProvider> */}
                 <Provider store={store}>
                     <SafeAreaView style={styles.container}>
                         <ContainerNavigator />
                     </SafeAreaView>
                 </Provider>
-                {/* </AuthorizationProvider> */}
             </ThemesProvider>
         </LocalizationProvider>
     );

@@ -14,7 +14,7 @@ import { resetStorage } from "../../../useCases/resetStorage";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthorizationUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateSelector";
 import { AppDispatch } from "../../../../../src/appStorage/redux/store";
-import { setIsAuthorizeAction, setUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
+import { setIsAuthorizeAction } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
 import { IUser } from "../../../useCases/validation/entities/IUser";
 import { authorization } from "../../../useCases/authorization";
 
@@ -51,13 +51,13 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
 
 
 
-    const authorizeUser = async (): Promise<void> => {
+    const authorizeUser = useCallback( async (): Promise<void> => {
         if (checkInputs()) {
             const userAuth = await authorization(inputEmail, inputPassword)
             dispatch(setIsAuthorizeAction(userAuth.data.status === 'ok'));
             resetStorage(inputEmail, inputPassword);
         }
-    };
+    }, [inputEmail, inputPassword]);
 
     return (
         <View style={styles.container}>
@@ -71,6 +71,7 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
                     value={inputEmail}
                     setText={setInputEmail}
                     validation={isValidEmail}
+                    errorText='Email must be in format: user@email.com'
                 />
                 <PasswordInput
                     iconHidden={require('../../../../../assets/crossedEye.png')}
@@ -78,8 +79,7 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
                     placeholderText={'Password'}
                     margin={styles.inputMargin}
                     value={inputPassword}
-                    setText={setInputPassword}
-                />
+                    setText={setInputPassword} errorText={"Password must contain  numbers, big and small letters"}                />
                 <Text style={styles.forgotPassword}>Forgot the password?</Text>
             </View>
             <View style={styles.exceptArea}>

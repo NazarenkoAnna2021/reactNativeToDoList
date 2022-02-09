@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         width: '95%',
         height: 45,
-        marginBottom: 20
     },
     authenticationInput: {
         zIndex: 1,
@@ -46,5 +45,11 @@ export const styles = StyleSheet.create({
     iconImg: {
         height: '100%',
         width: '100%',
+    },
+    errorText: {
+        height: 20,
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 12,
     }
 });

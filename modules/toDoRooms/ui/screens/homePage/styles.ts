@@ -2,12 +2,12 @@ import { StyleSheet } from 'react-native';
 
 
 export const styles = StyleSheet.create({
-    homeText: {
-        zIndex: 2,
-        width: '100%',
-        textAlign: 'center',
-        fontSize: 70,
-        fontWeight: '700',
+    container: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        padding: 10
+
     },
     helloText: {
         marginBottom: 85

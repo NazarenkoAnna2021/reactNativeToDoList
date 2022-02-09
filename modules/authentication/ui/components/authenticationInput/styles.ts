@@ -36,5 +36,11 @@ export const styles = StyleSheet.create({
     inputIcon: {
         position: 'absolute',
         right: 20
+    },
+    errorText: {
+        height: 20,
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 12,
     }
 });
