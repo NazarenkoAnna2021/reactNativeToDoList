@@ -8,7 +8,7 @@ import { TabHomeNavigation } from "../tabHomeNavigation";
 export const DrawerHomeNavigation: FC = () => {
     const Drawer = createDrawerNavigator<ParamListBase>();
 
-    return (
+    return (  
         <Drawer.Navigator drawerContent={() => <DrawerContent/>} screenOptions={{headerShown: false}}>
             <Drawer.Screen name="TabHomeNavigation" component={TabHomeNavigation} />
         </Drawer.Navigator>

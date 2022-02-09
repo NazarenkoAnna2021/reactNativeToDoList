@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useCallback } from "react";
 import { View, ImageBackground } from "react-native";
 import { AuthenticationInput } from "../../components/authenticationInput";
 import { PasswordInput } from "../../components/passwordInput";
@@ -14,6 +14,7 @@ import { resetStorage } from "../../../useCases/resetStorage";
 import { AppDispatch } from "../../../../../src/appStorage/redux/store";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
+import { registration } from "../../../useCases/registration";
 
 interface IProps {
     navigation: NavigationProp<any>
@@ -27,13 +28,21 @@ export const SignUpScreen: FC<IProps> = ({ navigation }) => {
     const [isEnabledButton, setIsEnabledButton] = useState<boolean>(false);
     const dispatch: AppDispatch = useDispatch();
 
-    const openScreen = (key: string): void => {
-        navigation.navigate(key);
-    };
 
     const checkInputs = (): boolean => {
         return !!inputUserName && !!inputEmail && !!inputPassword && isValidEmail(inputEmail) && isValidPassword(inputPassword) && isChecked;
     }
+    const signUp = (key: string): void => {
+        addUserToDB();
+        navigation.navigate(key);
+    };
+
+    const addUserToDB = useCallback(async () => {
+        if (inputUserName && inputEmail && inputPassword) {
+            const userReg = await registration(inputUserName, inputEmail, inputPassword)
+            console.log(userReg?.data.data)
+        }
+    }, [inputUserName, inputEmail, inputPassword])
 
     useEffect(() => {
         if (checkInputs()) {
@@ -81,8 +90,8 @@ export const SignUpScreen: FC<IProps> = ({ navigation }) => {
                 <TermsCheckBox text="I read and agree to Terms & Conditions" isChecked={isChecked} onPress={setIsChecked} />
             </View>
             <View style={styles.exceptArea}>
-                <AuthenticationButton text="sign up" onPress={() => openScreen('SignIn')} isEnabled={isEnabledButton} />
-                <AuthenticationTransitionText text={'Already have an account? Sign in'} onPress={() => openScreen('SignIn')} />
+                <AuthenticationButton text="sign up" onPress={() => signUp('SignIn')} isEnabled={isEnabledButton} />
+                <AuthenticationTransitionText text={'Already have an account? Sign in'} onPress={() => navigation.navigate('SignIn')} />
             </View>
         </View>
     );
