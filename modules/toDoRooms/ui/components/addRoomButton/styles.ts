@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 70,
-        height: '100%',
     },
     buttonText: {
         color: '#2e2115',

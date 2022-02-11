@@ -1,11 +1,13 @@
 import React, { FC, useCallback, useState } from "react";
-import { View, Text, TouchableOpacity, ListRenderItem } from "react-native";
+import { View, Text, TouchableOpacity, ListRenderItem, FlatList, Alert } from "react-native";
 import { useSelector } from "react-redux";
 import { selectAuthorizationUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateSelector";
 import { createRoom } from "../../../useCases/createRoom";
+import { IError } from "../../../useCases/entities/IError";
+import { IRoomData } from "../../../useCases/entities/IRoomData";
 import { getUsersByName } from "../../../useCases/getUsersByName";
+import { AddRoomButton } from "../../components/addRoomButton";
 import { AddRoomsInput } from "../../components/addRoomsInput";
-import { UsersList } from "../../components/usersList";
 import { styles } from "./styles";
 
 export const AddRoomsScreen: FC = () => {
@@ -13,12 +15,14 @@ export const AddRoomsScreen: FC = () => {
     const [users, setUsers] = useState<Array<{ [key: string]: string }>>([]);
     const [chosenUsers, setChosenUsers] = useState<Array<{ [key: string]: string }>>([]);
     const [membersId, setMembersId] = useState<Array<{ [key: string]: string | null | undefined }>>([{ id: CURRENT_USER_ID }]);
-    const [roomName, setRoomName] = useState('');
+    const [roomName, setRoomName] = useState<string>('');
 
     const getUsersList = async (namePart: string) => {
         const usersResponse = await getUsersByName(namePart);
-        if (usersResponse.data.data) {
+        if (usersResponse?.data?.data) {
             setUsers(usersResponse.data.data);
+        } else {
+            Alert.alert('error');
         }
     };
 
@@ -35,17 +39,20 @@ export const AddRoomsScreen: FC = () => {
 
     const createUsersRoom = useCallback(async () => {
         if (CURRENT_USER_ID) {
-            await createRoom(CURRENT_USER_ID, membersId, roomName);
+            const room: IRoomData = await createRoom(CURRENT_USER_ID, membersId, roomName);
+            console.log(room);
+            if (room.status === 'error') {
+                Alert.alert(room.status);
+            }
         }
     }, [chosenUsers])
 
-    const renderUser: FC<any> = ({ item }) => {
+    const renderUser: ListRenderItem<{ [key: string]: string; }> = ({ item }) => {
         return (
             <TouchableOpacity
-                style={{ borderWidth: 2 }}
                 onPress={() => moveUserToChosen(item)}
             >
-                <Text>{item.name}</Text>
+                <Text style={styles.membersTitle}>{item.name}</Text>
                 <Text>{item.email}</Text>
             </TouchableOpacity>
         );
@@ -54,10 +61,10 @@ export const AddRoomsScreen: FC = () => {
     const renderChosenUser: ListRenderItem<{ [key: string]: string; }> = ({ item }) => {
         return (
             <TouchableOpacity
-                style={{ borderWidth: 2 }}
+                style={styles.chosenUserItem}
                 onPress={() => moveToUsers(item)}
             >
-                <Text>{item.name}</Text>
+                <Text style={styles.membersName}>{item.name}</Text>
                 <Text>{item.email}</Text>
             </TouchableOpacity>
         );
@@ -66,28 +73,33 @@ export const AddRoomsScreen: FC = () => {
     return (
         <View style={styles.container}>
             <View style={styles.topArea}>
+                <View style={styles.addRoomArea}>
+                    <AddRoomsInput
+                        placeholderText={"room name"}
+                        onChangeText={setRoomName} />
+                    <AddRoomButton text={"Add Room"} onPress={createUsersRoom} />
+                </View>
+                <Text style={styles.membersTitle}>Members</Text>
+                <View style={styles.checkedUsersList}>
+                    <FlatList
+                        data={chosenUsers}
+                        renderItem={renderChosenUser}
+                        keyExtractor={chosenUsers => chosenUsers.id}
+                        horizontal={true}
+                    />
+                </View>
                 <AddRoomsInput
                     placeholderText={"user name"}
                     onChangeText={getUsersList} />
-                <UsersList
-                    users={chosenUsers}
-                    renderUser={renderChosenUser}
-                    horizontal={true}
-                    isHeaderShown={true}
-                    createUsersRoom={createUsersRoom}
-                />
+
+
             </View>
-            <View style={styles.userListArea}>
-                <UsersList
-                    users={users}
-                    renderUser={renderUser}
-                    horizontal={false}
-                    isHeaderShown={false}
-                    createUsersRoom={() => { }}
+            <View style={styles.userList}>
+                <FlatList
+                    data={users}
+                    renderItem={renderUser}
+                    keyExtractor={users => users.id}
                 />
-                <AddRoomsInput
-                    placeholderText={"room name"}
-                    onChangeText={setRoomName} />
             </View>
         </View>
     );

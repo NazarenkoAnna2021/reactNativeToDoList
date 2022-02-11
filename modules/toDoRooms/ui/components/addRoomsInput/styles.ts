@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
    addRoomsInput: {
-        width: '100%',
         height: 50,
         paddingLeft: 20,
         borderRadius: 3,

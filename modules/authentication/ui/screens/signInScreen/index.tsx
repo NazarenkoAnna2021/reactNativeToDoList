@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { View, ImageBackground, Text } from "react-native";
+import { View, ImageBackground, Text, Alert } from "react-native";
 import { AuthenticationInput } from "../../components/authenticationInput";
 import { PasswordInput } from "../../components/passwordInput";
 import { AuthenticationButton } from "../../components/authenticationButton";
@@ -54,7 +54,7 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
     const authorizeUser = useCallback(async (): Promise<void> => {
         if (checkInputs()) {
             const userAuth = await authorization(inputEmail, inputPassword)
-            if (userAuth.data.status === 'ok') {
+            if (userAuth?.data?.status === 'ok') {
                 resetStorage(inputEmail, inputPassword, userAuth.data.data.user.id);
                 dispatch(setUserData({
                     value: {
@@ -66,6 +66,8 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
                 }));
 
                 dispatch(setIsAuthorizeAction(true));
+            } else {
+                Alert.alert('error')
             }
         }
     }, [inputEmail, inputPassword]);

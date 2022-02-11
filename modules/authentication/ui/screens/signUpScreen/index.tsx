@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useCallback } from "react";
-import { View, ImageBackground, Text } from "react-native";
+import { View, ImageBackground, Text, Alert } from "react-native";
 import { AuthenticationInput } from "../../components/authenticationInput";
 import { PasswordInput } from "../../components/passwordInput";
 import { TermsCheckBox } from "../../components/termsCheckBox";
@@ -41,6 +41,8 @@ export const SignUpScreen: FC<IProps> = ({ navigation }) => {
                 setLocalData(userReg.data.data.id);
                 console.log(userReg.data.data.id)
                 navigation.navigate('SignIn');
+            } else {
+                Alert.alert('error')
             }
         }
     }, [inputUserName, inputEmail, inputPassword]);
