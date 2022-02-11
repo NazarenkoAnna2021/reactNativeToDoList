@@ -1,4 +1,4 @@
-import { IUser } from "../../../../modules/authentication/useCases/validation/entities/IUser";
+import { IUser } from "../../../../modules/shared/entities/IUser";
 
 export interface IAction {
     type: 'SET_AUTHORIZE' | 'SET_USER_DATA' | 'SIGN_OUT';

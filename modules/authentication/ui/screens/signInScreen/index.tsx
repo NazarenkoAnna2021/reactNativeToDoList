@@ -14,8 +14,8 @@ import { resetStorage } from "../../../useCases/resetStorage";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthorizationUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateSelector";
 import { AppDispatch } from "../../../../../src/appStorage/redux/store";
-import { setIsAuthorizeAction } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
-import { IUser } from "../../../useCases/validation/entities/IUser";
+import { setIsAuthorizeAction, setUserData } from "../../../../../src/appStorage/redux/authenticationState/authenticationStateActions";
+import { IUser } from "../../../../shared/entities/IUser";
 import { authorization } from "../../../useCases/authorization";
 
 interface IProps {
@@ -51,11 +51,22 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
 
 
 
-    const authorizeUser = useCallback( async (): Promise<void> => {
+    const authorizeUser = useCallback(async (): Promise<void> => {
         if (checkInputs()) {
             const userAuth = await authorization(inputEmail, inputPassword)
-            dispatch(setIsAuthorizeAction(userAuth.data.status === 'ok'));
-            resetStorage(inputEmail, inputPassword);
+            if (userAuth.data.status === 'ok') {
+                resetStorage(inputEmail, inputPassword, userAuth.data.data.user.id);
+                dispatch(setUserData({
+                    value: {
+                        name: userAuth.data.data.user.name,
+                        email: inputEmail,
+                        password: inputPassword,
+                        id: userAuth.data.data.user.id
+                    }
+                }));
+
+                dispatch(setIsAuthorizeAction(true));
+            }
         }
     }, [inputEmail, inputPassword]);
 
@@ -79,7 +90,7 @@ export const SignInScreen: FC<IProps> = ({ navigation }) => {
                     placeholderText={'Password'}
                     margin={styles.inputMargin}
                     value={inputPassword}
-                    setText={setInputPassword} errorText={"Password must contain  numbers, big and small letters"}                />
+                    setText={setInputPassword} errorText={"Password must contain  numbers, big and small letters"} />
                 <Text style={styles.forgotPassword}>Forgot the password?</Text>
             </View>
             <View style={styles.exceptArea}>

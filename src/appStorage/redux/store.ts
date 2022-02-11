@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { IUser } from '../../../modules/authentication/useCases/validation/entities/IUser';
+import { IUser } from '../../../modules/shared/entities/IUser';
 import { rootReducer } from './rootReducer';
 
 export const store = createStore(rootReducer);

@@ -1,7 +1,8 @@
 export interface IUser {
     value: {
-        userName?: string | null;
         email: string | null;
         password: string | null;
+        id: string | null;
+        name: string | null;
     }
 }

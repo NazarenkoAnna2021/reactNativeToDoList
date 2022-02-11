@@ -1,4 +1,4 @@
-import { IUser } from "../../../../modules/authentication/useCases/validation/entities/IUser"
+import { IUser } from "../../../../modules/shared/entities/IUser"
 import { IAction } from "./authenticationStateActions";
 
 const initialState: IAuthorizationReducer = {

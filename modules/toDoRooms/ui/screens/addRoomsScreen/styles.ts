@@ -5,12 +5,17 @@ const SCREEN_HIGHT = Dimensions.get('screen').height;
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        display: 'flex',
         height: SCREEN_HIGHT,
-        width: SCREEN_WIDTH
+        width: SCREEN_WIDTH,
+        backgroundColor: '#b4cdd7',
+        padding: 10
+
     },
-    listsArea: {
-        // display: 'flex',
+    userListArea: {
+        height: 200
+    },
+    topArea: {
+        height: 140,
+        justifyContent: 'space-between',
     }
 });

@@ -37,21 +37,23 @@ export const SignUpScreen: FC<IProps> = ({ navigation }) => {
     const signUp = useCallback(async () => {
         if (inputUserName && inputEmail && inputPassword) {
             const userReg = await registration(inputUserName, inputEmail, inputPassword);
-            if (userReg.data.status === 'ok') {
+            if (userReg?.data?.status === 'ok') {
+                setLocalData(userReg.data.data.id);
+                console.log(userReg.data.data.id)
                 navigation.navigate('SignIn');
-                setLocalData();
             }
         }
     }, [inputUserName, inputEmail, inputPassword]);
 
-    const setLocalData = () => {
+    const setLocalData = (id: string) => {
         if (checkInputs()) {
-            resetStorage(inputEmail, inputPassword);
+            resetStorage(inputEmail, inputPassword, id);
             dispatch(setUserData({
                 value: {
-                    userName: inputUserName,
+                    name: inputUserName,
                     email: inputEmail,
-                    password: inputPassword
+                    password: inputPassword,
+                    id: id
                 }
             }))
         }

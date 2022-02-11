@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IUser } from '../validation/entities/IUser';
+import { IUser } from '../../../shared/entities/IUser';
 
 export const storeUser = async (value: IUser) => {
     try {
